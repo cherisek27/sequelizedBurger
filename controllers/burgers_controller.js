@@ -1,50 +1,58 @@
 //Node dependencies 
-var express = require("express"); 
-var router = express.Router(); 
-//Import the model (burger.js) to use its database functions
-var db = require("../models"); 
+var express = require("express");
 
-//Create all routes and set up logic within those routes where required
-//Redirects to index page
-router.get("/", function(req, res) {  
+var router = express.Router();
+// edit burger model to match sequelize
+var db = require("../models/");
+
+// get route -> index
+router.get("/", function(req, res) {
+  // send us to the next get function instead.
   res.redirect("/burgers");
 });
 
-//Renders all burgers to DOM
-router.get("/burgers", function(req, res) { 
-  db.Burgers.findAll({ 
-    order: [
-      ["burger_name", "ASC"]
-    ]
-  }).then(function(allBurgers) {
+// get route, edited to match sequelize
+router.get("/burgers", function(req, res) {
+  // replace old function with sequelize function
+  db.Burger.findAll()
+    // use promise method to pass the burgers...
+    .then(function(dbBurger) {
+      console.log(dbBurger);
+      // into the main index, updating the page
+      var hbsObject = { burger: dbBurger };
+      return res.render("index", hbsObject);
+    });
+});
 
-    var hbsObject = {
-      burgers: allBurgers
-    }; 
-    res.render("index", hbsObject);
-  });
-}); 
-
-router.post("/create", function(req, res) { 
-  db.Burgers.create({
+// post route to create burgers
+router.post("/burgers/create", function(req, res) {
+  // edited burger create to add in a burger_name
+  db.Burger.create({
     burger_name: req.body.burger_name
-  }).then(function() { 
-    res.redirect("/burgers");
+  })
+    // pass the result of our call
+  .then(function(dbBurger) {
+      // log the result to our terminal/bash window
+    console.log(dbBurger);
+      // redirect
+    res.redirect("/");
   });
-}); 
+});
 
-router.post("/update/:id", function(req, res) { 
- db.Burgers.update({
-    devoured: req.body.devoured
- },{
-   where: {
-    id: req.params.id
+// put route to devour a burger
+router.put("/burgers/update", function(req, res) {
+  // update one of the burgers
+  db.Burger.update({
+    devoured: true
+  },
+    {
+      where: {
+        id: req.body.burger_id
+      }
     }
-  }).then(function() {
-    res.redirect("/burgers");
+  ).then(function(dbBurger) {
+    res.redirect("/");
   });
-}); 
+});
 
-
-//Export route
-module.exports = router; 
+module.exports = router;
