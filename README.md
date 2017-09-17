@@ -101,3 +101,5 @@ Created a Sequelized `Burger` app.
 <img width="771" alt="screen shot 2017-09-17 at 12 26 37 pm" src="https://user-images.githubusercontent.com/26241261/30524177-9460f088-9ba3-11e7-9192-b89ee7877366.png">
 
 
+<img width="920" alt="screen shot 2017-09-17 at 12 26 47 pm" src="https://user-images.githubusercontent.com/26241261/30524192-ca49669e-9ba3-11e7-807b-c01df6d88f34.png">
+
